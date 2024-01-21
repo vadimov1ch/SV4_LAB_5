@@ -5,25 +5,72 @@ import './booksPage.css';
 
 const BooksPage = () => {
   const [books, setBooks] = useState([]);
-  const [selectedBooks, setSelectedBooks] = useState(new Set()); // Для отслеживания выбранных книг
-  const [isAddBookDialogOpen, setIsAddBookDialogOpen] = useState(false);
+  const [selectedBooks, setSelectedBooks] = useState(new Set());
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editingBook, setEditingBook] = useState(null);
 
-  const AddBookDialog = ({ isOpen, onClose, onSave }) => {
+  useEffect(() => {
+    fetch('/data/books.json')
+      .then(response => response.json())
+      .then(data => setBooks(data))
+      .catch(error => console.error("Ошибка загрузки данных о книгах:", error));
+  }, []);
+
+  const toggleSelection = (bookId) => {
+    const newSelection = new Set(selectedBooks);
+    if (newSelection.has(bookId)) {
+      newSelection.delete(bookId);
+    } else {
+      newSelection.add(bookId);
+    }
+    setSelectedBooks(newSelection);
+  };
+
+  const deleteSelectedBooks = () => {
+    setBooks(books.filter(book => !selectedBooks.has(book.id)));
+    setSelectedBooks(new Set());
+  };
+
+  const handleSaveBook = (book) => {
+    if (editingBook) {
+      setBooks(books.map(b => b.id === book.id ? book : b));
+    } else {
+      setBooks([...books, { ...book, id: Date.now() }]);
+    }
+    setIsDialogOpen(false);
+    setEditingBook(null);
+  };
+
+  const AddBookDialog = ({ isOpen, onClose, onSave, book }) => {
     const [title, setTitle] = useState('');
     const [author, setAuthor] = useState('');
     const [coverImageUrl, setCoverImageUrl] = useState('');
     const [summary, setSummary] = useState('');
 
+    useEffect(() => {
+      if (book) {
+        setTitle(book.title);
+        setAuthor(book.author);
+        setCoverImageUrl(book.coverImageUrl);
+        setSummary(book.summary);
+      } else {
+        setTitle('');
+        setAuthor('');
+        setCoverImageUrl('');
+        setSummary('');
+      }
+    }, [book]);
+
     const handleSubmit = (e) => {
       e.preventDefault();
       onSave({
-        id: Date.now(), // Простой способ генерации уникального ID
+        id: book ? book.id : Date.now(),
         title,
         author,
         coverImageUrl,
         summary,
       });
-      onClose(); // Закрыть диалог после сохранения
+      onClose();
     };
 
     if (!isOpen) return null;
@@ -44,45 +91,11 @@ const BooksPage = () => {
     );
   };
 
-  useEffect(() => {
-    fetch('/data/books.json')
-      .then(response => response.json())
-      .then(data => setBooks(data))
-      .catch(error => console.error("Ошибка загрузки данных о книгах:", error));
-  }, []);
-
-  // Функция для обработки выбора/снятия выбора книги
-  const toggleSelection = (bookId) => {
-    const newSelection = new Set(selectedBooks);
-    if (newSelection.has(bookId)) {
-      newSelection.delete(bookId);
-    } else {
-      newSelection.add(bookId);
-    }
-    setSelectedBooks(newSelection);
-  };
-
-  // Функция для удаления выбранных книг
-  const deleteSelectedBooks = () => {
-    const remainingBooks = books.filter(book => !selectedBooks.has(book.id));
-    setBooks(remainingBooks);
-    setSelectedBooks(new Set()); // Очистить выбор после удаления
-  };
-
   return (
     <div className="books-page">
       <h1>Список книг</h1>
-      <button onClick={() => setIsAddBookDialogOpen(true)}>Добавить книгу</button>
-      <button onClick={deleteSelectedBooks} disabled={selectedBooks.size === 0}>
-        Удалить выбранные книги
-      </button>
-      <AddBookDialog
-        isOpen={isAddBookDialogOpen}
-        onClose={() => setIsAddBookDialogOpen(false)}
-        onSave={(newBook) => {
-          setBooks([...books, newBook]);
-        }}
-      />
+      <button onClick={() => { setIsDialogOpen(true); setEditingBook(null); }}>Добавить книгу</button>
+      <button onClick={deleteSelectedBooks} disabled={selectedBooks.size === 0}>Удалить выбранные книги</button>
       <div className="books-list">
         {books.map(book => (
           <div key={book.id} className="book-item">
@@ -94,9 +107,16 @@ const BooksPage = () => {
             <Link to={`/books/${book.id}`} className="book-link">
               <Book {...book} />
             </Link>
+            <button onClick={() => { setIsDialogOpen(true); setEditingBook(book); }}>Редактировать</button>
           </div>
         ))}
       </div>
+      <AddBookDialog
+        isOpen={isDialogOpen}
+        onClose={() => { setIsDialogOpen(false); setEditingBook(null); }}
+        onSave={handleSaveBook}
+        book={editingBook}
+      />
     </div>
   );
 };
