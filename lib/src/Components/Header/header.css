@@ -1,0 +1,42 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+}
+
+.logo a,
+.navigation ul,
+.profile a {
+    color: white;
+    text-decoration: none;
+}
+
+.navigation ul {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.navigation li {
+    margin-right: 20px;
+}
+
+.navigation li:last-child {
+    margin-right: 0;
+}
+
+/* Стилизация для адаптивного меню и элементов, если нужно */
+@media (max-width: 768px) {
+    .navigation {
+        display: none;
+        /* Пример скрытия навигации на маленьких экранах */
+    }
+
+    .header {
+        flex-direction: column;
+    }
+}

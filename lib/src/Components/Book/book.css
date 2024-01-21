@@ -1,0 +1,39 @@
+.book {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.book-cover {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.book-info {
+    padding: 16px;
+}
+
+.book-title {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.book-author {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 1rem;
+    color: #666;
+}
+
+.book-summary {
+    font-size: 0.9rem;
+    color: #666;
+}

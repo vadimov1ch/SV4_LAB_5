@@ -1,0 +1,31 @@
+.book-details {
+    padding: 20px;
+}
+
+.details-container {
+    display: flex;
+    align-items: start;
+    gap: 20px;
+}
+
+.details-container img {
+    width: 200px;
+    /* Фиксированная ширина для изображения обложки */
+    height: auto;
+    border-radius: 5px;
+}
+
+.book-info {
+    flex-grow: 1;
+}
+
+.book-info p {
+    line-height: 1.6;
+}
+
+.book-info a {
+    display: inline-block;
+    margin-top: 20px;
+    color: #007bff;
+    text-decoration: none;
+}

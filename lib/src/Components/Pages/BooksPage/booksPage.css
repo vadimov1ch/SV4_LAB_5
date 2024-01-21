@@ -1,0 +1,90 @@
+.books-page {
+    padding: 20px;
+    background-color: #f8f9fa;
+    /* Светлый фон для страницы */
+}
+
+.books-page h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.books-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    /* Адаптивная сетка карточек */
+    gap: 20px;
+    padding: 0;
+}
+
+.book-link {
+    text-decoration: none;
+    /* Убираем подчёркивание у ссылок */
+    color: inherit;
+    /* Цвет текста наследуется от родителя */
+}
+
+.book.selected {
+    border: 2px solid blue;
+    /* Выделение выбранных книг */
+}
+
+.book {
+    border: 1px solid #dee2e6;
+    /* Граница вокруг карточки книги */
+    border-radius: 5px;
+    /* Скругление углов */
+    overflow: hidden;
+    /* Обрезаем содержимое, выходящее за границы */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* Лёгкая тень для карточки */
+    transition: box-shadow 0.3s ease;
+    /* Плавное изменение тени */
+}
+
+.book:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    /* Увеличенная тень при наведении */
+}
+
+.book-cover {
+    width: 100%;
+    /* Обложка книги занимает всю ширину карточки */
+    height: 200px;
+    /* Фиксированная высота для обложки */
+    object-fit: cover;
+    /* Обложка книги покрывает всю область */
+}
+
+.book-info {
+    padding: 10px;
+    /* Отступы внутри карточки */
+}
+
+.book-title,
+.book-author {
+    margin: 0;
+    /* Убираем внешние отступы */
+    color: #333;
+    /* Тёмно-серый цвет текста */
+}
+
+.book-title {
+    font-size: 1.1rem;
+    /* Размер шрифта для названия */
+    margin-bottom: 5px;
+    /* Отступ между названием и автором */
+}
+
+.book-author {
+    font-size: 0.9rem;
+    /* Размер шрифта для автора */
+    color: #6c757d;
+    /* Серый цвет текста */
+}
+
+.book-summary {
+    display: none;
+    /* По умолчанию скрываем краткое описание */
+}
